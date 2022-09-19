@@ -13,10 +13,32 @@ const express = require("express");
 // https://www.npmjs.com/package/hbs
 const hbs = require("hbs");
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
+
 const app = express();
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
+
+
+app.set('trust proxy', 1);
+app.use(
+    session({
+        secret: 'key',
+        resave: true,
+        saveUninitialized: false,
+        cookie: {
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true,
+            maxAge: 60000 // 60 * 1000 ms === 1 min
+        },
+        store: MongoStore.create({
+            mongoUrl: 'mongodb://localhost/book-tracker' })
+    })
+)
+
 
 // default value for title local
 const capitalized = require("./utils/capitalized");

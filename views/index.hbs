@@ -1,2 +1,84 @@
-<h1>{{appTitle}} 🚀</h1>
-<p>Welcome Ironhacker!</p>
+<style>
+    #header{
+        background-color: #30638E;
+        width: 100%;
+        height: 80px;
+    }
+    h1{
+        margin: 0;
+        padding-top: 20px;
+        text-align: center;
+        color: #EDAE49;
+    }
+    body{
+        background-color: #003D5B;
+    }
+    a{
+        text-decoration: none;
+        width: 100px;
+        margin: 40px auto;
+    }
+    p{
+        text-align: center;
+        color: #D1495B;
+        background-color: white;
+        display: block;
+        font-size: 20px;
+        margin: 40px auto;
+        width: 100px;
+    }
+    form{
+        background-color: white;
+        padding: 10px;
+        width: 200px;
+        margin: 100px auto;
+        box-shadow: 15px 15px #EDAE49;
+    }
+    label,input,button{
+        display: block;
+        text-align: center;
+        margin: 5px auto;
+    }
+    [name='username'], [name="password"]{
+        margin-bottom: 40px;
+    }
+    label{
+        color: #D1495B;
+        font-size: 20px;
+    }
+    input{
+        padding: 5px;
+    }
+    button{
+        text-align: center;
+        color: white;
+        background-color: #003D5B;
+        display: block;
+        font-size: 20px;
+        width: 100px;
+    }
+    .text-border{
+        -webkit-text-stroke-width: .5px;
+        -webkit-text-stroke-color: black;
+    }
+    .round-border{
+        border-radius: 25px;
+        border: 1px solid black;
+    }
+</style>
+
+<div id="header">
+   <h1 class="text-border" >Reader's Nook</h1>
+</div>
+
+<a href="/home"><p class="text-border round-border">Home</p></a>
+<a href="/signup"><p class="text-border round-border">Sign Up</p></a>
+
+
+<form class="round-border" action="/login" method="POST">
+    <label class="text-border" >Username</label>
+    <input class="round-border"  type="text" name="username">
+    <label class="text-border" >Password</label>
+    <input class="round-border"  type="text" name="password">
+    <button class="text-border round-border" type="submit" >Log In</button>
+</form>
