@@ -1,11 +1,60 @@
-<h1>Sign Up</h1>
+<style>
+    h1{
+        font-size: 40px;
+        margin: 0;
+        padding-top: 20px;
+        text-align: center;
+        color: #EDAE49;
+    }
+    body{
+        background-color: #D1495B;
+    }
+    form{
+        margin-top: 50px;
+    }
+    label,input,button{
+        display: block;
+        text-align: center;
+        margin: 5px auto;
+    }
+    label{
+        color: #003D5B;
+        font-size: 25px;
+    }
+    input{
+        padding: 10px 40px;
+        margin-bottom: 30px;
+    }
+    button{
+        text-align: center;
+        color: white;
+        background-color: #00798C;
+        display: block;
+        font-size: 25px;
+        width: 150px;
+        margin-top: 60px;
+        padding: 5px 20px;
+    }
+    .text-border{
+        -webkit-text-stroke-width: .5px;
+        -webkit-text-stroke-color: black;
+    }
+    .round-border{
+        border-radius: 25px;
+        border: 1px solid black;
+    }
+</style>
+
+
+
+<h1 class="text-border">Sign Up</h1>
 
 <form action="/signup" method="POST">
-    <label>Name</label>
-    <input type="text" name="name">
-    <label>Username</label>
-    <input type="text" name="username">
-    <label>Password</label>
-    <input type="text" name="password">
-    <button type="submit" >Sign Up</button>
+    <label class="text-border">Name</label>
+    <input class="round-border" type="text" name="name" required>
+    <label class="text-border">Username</label>
+    <input class="round-border" type="text" name="username" required>
+    <label class="text-border">Password</label>
+    <input class="round-border" type="text" name="password" required>
+    <button class="text-border round-border" type="submit" >Sign Up</button>
 </form>
