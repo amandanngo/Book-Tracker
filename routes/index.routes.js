@@ -2,18 +2,22 @@ const router = require("express").Router();
 const User = require('../models/User.model');
 const bcryptjs = require('bcryptjs');
 const { isAuthenticated, isNotAuthenticated } = require('../middlewares/auth.middleware');
-
+const axios = require("axios");
+const Book = require("../models/Book.model");
 
 /* GET home page */
 router.get("/", (req, res, next) => {
   res.render("index");
 });
 
-router.get("/signup", isNotAuthenticated, (req, res, next) => {
+router.get("/signup", (req, res, next) => {
   res.render("sign-up");
 });
 
 router.post("/signup", (req, res, next) => {
+
+  //Add validation to see if 
+
   const myName = req.body.name;
   const myUsername = req.body.username;
   const myPassword = req.body.password;
@@ -26,12 +30,13 @@ router.post("/signup", (req, res, next) => {
       password: myHashedPass
   })
       .then(savedUser => {
-          res.send(savedUser)
+          res.redirect('/home')
       })
       .catch(err => {
           res.send(err)
       })
 });
+
 
 router.post('/login', (req,res,next) => {
   console.log(req.body)
@@ -85,15 +90,46 @@ router.get('/home', isAuthenticated, (req,res,next) => {
 
 router.get('/book-search', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    res.render('book-search')
+    console.log()
+    let searchQuery = req.query.lookup;
+
+    axios.get('https://www.googleapis.com/books/v1/volumes?q='+searchQuery)  
+    .then(response => {
+      res.render('book-search', {
+        stuff: response.data.items})
+    })
+    .catch(err => {
+      res.send(err)
+    })
   } else {
       res.redirect('/')
   }
 })
 
+router.post('/book-search', isAuthenticated, (req,res,next) => {
+  Book.create({
+    title: req.body.title,
+    author:req.body.author,
+    listType: req.body.books,
+    cover: req.body.imageURL
+  })
+  .then(newBook => {
+    req.session.user.books.push(newBook._id);
+    console.log(req.session.user.books,newBook._id)
+    res.redirect('/home')
+  }) 
+  .catch(err => {
+    res.send(err)
+  })
+})
+
 router.get('/currently-reading', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    res.render('currently-reading')
+    User.findById(req.session.user._id)
+      .populate('books')
+      .then(userData => {
+        res.send(req.session.user)
+      })
   } else {
       res.redirect('/')
   }

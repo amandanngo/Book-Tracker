@@ -1,1 +1,25 @@
+<style>
+
+</style>
+
 <h1>Book Search</h1>
+
+
+{{#each stuff}}
+    <img src={{this.volumeInfo.imageLinks.thumbnail}}>
+    <p>{{this.volumeInfo.title}}</p>
+    <p>{{this.volumeInfo.authors}}</p>
+    <p>Page Count: {{this.volumeInfo.pageCount}}</p>
+    
+    <form action="/book-search" method="POST">
+        <input type="hidden" name="title" value="{{this.volumeInfo.title}}">
+        <input type="hidden" name="author" value="{{this.volumeInfo.authors}}">
+        <input type="hidden" name="imageURL" value="{{this.volumeInfo.imageLinks.thumbnail}}">
+        <select name="books">
+            <option value="already">Already read</option>
+            <option value="currently">Currently reading</option>
+            <option value="want">Want to read</option>
+        </select>
+        <button>Add</button>
+    </form>
+{{/each}}

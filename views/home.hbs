@@ -3,7 +3,11 @@
     <button type="submit">Log Out</button>
 </form>
 
-<a href="/book-search">Book Search</a>
+<form action="/book-search" method="GET">
+    <input type="text" name="lookup">
+    <button>Search</button>
+</form>
+
 <a href="/currently-reading">Currently Reading</a>
 <a href="/want-to-read">Want to Read</a>
 <a href="/already-read">Already read</a>
