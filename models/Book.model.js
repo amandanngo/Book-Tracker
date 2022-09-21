@@ -8,7 +8,8 @@ const bookSchema = new Schema({
         type: String,
         enum: ['want','already','currently']
     },
-    cover: String
+    cover: String,
+    userId: String
 })
 
 const Book = mongoose.model('Book', bookSchema);

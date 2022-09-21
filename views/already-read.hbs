@@ -1,1 +1,21 @@
 <h1>Already Read</h1>
+
+{{# each books}}
+    <img src={{this.cover}}>
+    <h5>{{this.title}}</h5>
+    <h6>by {{this.author}}</h6>
+
+    <form action="/{{this._id}}/edit" method="POST">
+        <label>List: </label>
+        <select name="books" placeholder={{this.listType}}>
+            <option value="already">Already read</option>
+            <option value="currently">Currently reading</option>
+            <option value="want">Want to read</option>
+        </select>
+        <button type="submit">Edit</button>
+    </form>
+
+    <form action="/{{this._id}}/delete" method="POST">
+        <button type="submit">Delete</button>
+    </form>
+{{/each}}

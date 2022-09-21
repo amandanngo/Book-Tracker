@@ -1,13 +1,71 @@
-<h1>Book List Home Page</h1>
-<form action="/logout" method="POST">
-    <button type="submit">Log Out</button>
-</form>
+<style>
+    body{
+        background-color: #EDAE49;
+    }
+    #header{
+        background-color: #30638E;
+        height: 60px;
+        padding-top: 10px;
+        display: flex;
+        align-content: center;
+    }
+    h1{
+        width: 60%;
+        color: white;
+        font-size: 30px;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: black;
+        margin: 5px 0px 0px 40px;
+    }
+    #logout{
+        margin-top: 15px;
+        
+    }
+    #logout button{
+        padding: 5px 10px;
+    }
+    label{
+        color: #D1495B;
+        display: block;
+        margin: 40px auto 0px auto;
+        text-align: center;
+        font-size: 20px;
+    }
+    input{
+        display: block;
+        margin: 0px auto 90px auto;
+        width: 70%;
+        padding: 10px;
+        text-align: center;
+    }
+    a{
+        display: block;
+        text-align: center;
+        width: 80%;
+        margin: 20px auto;
+        text-decoration: none;
+        padding: 5px;
+        background-color: white;
+        color: #30638E;
+        box-shadow: 5px 5px #D1495B;
+        font-size: 25px;
+    }
+</style>
+
+
+<div id="header">
+    <h1>Home Nook</h1>
+    <form id="logout" action="/logout" method="POST">
+        <button class="round-border text-border" type="submit">Log Out</button>
+    </form>
+</div>
+
 
 <form action="/book-search" method="GET">
-    <input type="text" name="lookup">
-    <button>Search</button>
+    <label class="text-border">Search books</label>
+    <input class="round-border" type="text" name="lookup">
 </form>
 
-<a href="/currently-reading">Currently Reading</a>
-<a href="/want-to-read">Want to Read</a>
-<a href="/already-read">Already read</a>
+<a class="round-border text-border" href="/currently-reading">Currently Reading</a>
+<a class="round-border text-border" href="/want-to-read">Want to Read</a>
+<a class="round-border text-border" href="/already-read">Already read</a>

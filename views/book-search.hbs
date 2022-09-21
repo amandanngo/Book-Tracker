@@ -1,25 +1,98 @@
 <style>
+    body{
+        background-color: #003D5B;
+    }
+    h1{
+        color: white;
+        margin: 25px;
+        font-size: 25px;
+        overflow-wrap: break-word;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: black;
+    }
+    .book{
+        background-color: white;
+        width: 90%;
+        margin: 20px auto;
+        
+    }
+    .bookInfo{
+        display: flex;
+    }
+    .text{
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        padding: 15px;
+    }
+    #title{
+        font-size: 25px;
+        color: #003D5B;
+    }
+    #author{
+        font-size: 16px;
+        color: #003D5B;
+    }
+    #pages{
+        font-size: 15px;
+        color: #D1495B;
+    }
+    img{
+        height: 150px;
+        margin: 10% 0 0 35px;
+        box-shadow: 5px 5px 5px grey;
+    }
+    p{
+        text-align: center;
+        margin: 5px 0;
+    }
+    form{
+        display: block;
+        margin: 20px 70px 20px 70px;
+    }
+    select{
+        padding: 5px;
+        font-family: Noto Sans;
+        margin: 0
+    }
+    button{
+        padding: 3px 10px;
+        font-family: Noto Sans;
+        font-size: 16px;
+        margin: 0;
+        color: white;
+        background-color: #D1495B;
+    }
+    
+        
+
 
 </style>
 
-<h1>Book Search</h1>
+<h1>Searching for '{{query}}'</h1>
+
 
 
 {{#each stuff}}
-    <img src={{this.volumeInfo.imageLinks.thumbnail}}>
-    <p>{{this.volumeInfo.title}}</p>
-    <p>{{this.volumeInfo.authors}}</p>
-    <p>Page Count: {{this.volumeInfo.pageCount}}</p>
-    
-    <form action="/book-search" method="POST">
-        <input type="hidden" name="title" value="{{this.volumeInfo.title}}">
-        <input type="hidden" name="author" value="{{this.volumeInfo.authors}}">
-        <input type="hidden" name="imageURL" value="{{this.volumeInfo.imageLinks.thumbnail}}">
-        <select name="books">
-            <option value="already">Already read</option>
-            <option value="currently">Currently reading</option>
-            <option value="want">Want to read</option>
-        </select>
-        <button>Add</button>
-    </form>
+    <div class="book round-border">
+        <div class="bookInfo">
+            <img src={{this.volumeInfo.imageLinks.thumbnail}}>
+            <div class="text">
+                <p id="title" class="text-border">{{this.volumeInfo.title}}</p>
+                <p id="author" class="text-border">by {{this.volumeInfo.authors}}</p>
+                <p id="pages" class="text-border">Pages: {{this.volumeInfo.pageCount}}</p>
+            </div>
+        </div>
+        <form action="/book-search" method="POST">
+            <input type="hidden" name="title" value="{{this.volumeInfo.title}}">
+            <input type="hidden" name="author" value="{{this.volumeInfo.authors}}">
+            <input type="hidden" name="imageURL" value="{{this.volumeInfo.imageLinks.thumbnail}}">
+            <select class="round-border" name="books">
+                <option value="already">Already read</option>
+                <option value="currently">Currently reading</option>
+                <option value="want">Want to read</option>
+            </select>
+            <button class="round-border text-border">Add</button>
+        </form>
+    </div>
 {{/each}}

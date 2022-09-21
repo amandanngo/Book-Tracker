@@ -39,7 +39,6 @@ router.post("/signup", (req, res, next) => {
 
 
 router.post('/login', (req,res,next) => {
-  console.log(req.body)
 
   const myUsername = req.body.username;
   const myPassword = req.body.password;
@@ -52,8 +51,6 @@ router.post('/login', (req,res,next) => {
       username: myUsername
     })
     .then(foundUser => {
-      console.log(foundUser);
-
       if(!foundUser){
         res.send('no user matching this username')
       }
@@ -62,10 +59,11 @@ router.post('/login', (req,res,next) => {
 
       if(!isValidPassword){
         res.send('incorrect password')
-      }
-      req.session.user = foundUser;
-
+      }else{
+        req.session.user = foundUser;
         res.redirect('/home');
+      }
+     
     })
     .catch(err => res.send(err))
   }
@@ -82,7 +80,8 @@ router.post('/logout', (req,res,next) => {
 
 router.get('/home', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    res.render('home')
+    res.render('home', {
+      name: req.session.user.name})
   } else {
       res.redirect('/')
   }
@@ -96,7 +95,9 @@ router.get('/book-search', isAuthenticated, (req,res,next) => {
     axios.get('https://www.googleapis.com/books/v1/volumes?q='+searchQuery)  
     .then(response => {
       res.render('book-search', {
-        stuff: response.data.items})
+        stuff: response.data.items,
+        query: searchQuery
+      })
     })
     .catch(err => {
       res.send(err)
@@ -111,11 +112,10 @@ router.post('/book-search', isAuthenticated, (req,res,next) => {
     title: req.body.title,
     author:req.body.author,
     listType: req.body.books,
-    cover: req.body.imageURL
+    cover: req.body.imageURL,
+    userId: req.session.user._id
   })
   .then(newBook => {
-    req.session.user.books.push(newBook._id);
-    console.log(req.session.user.books,newBook._id)
     res.redirect('/home')
   }) 
   .catch(err => {
@@ -125,10 +125,13 @@ router.post('/book-search', isAuthenticated, (req,res,next) => {
 
 router.get('/currently-reading', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    User.findById(req.session.user._id)
-      .populate('books')
-      .then(userData => {
-        res.send(req.session.user)
+    Book.find({$and: [{userId: req.session.user._id},{listType: 'currently'}]})
+      .then(currentBooks => {
+        res.render('currently-reading', {
+          books: currentBooks})
+      })
+      .catch(err => {
+        res.send(err)
       })
   } else {
       res.redirect('/')
@@ -137,7 +140,14 @@ router.get('/currently-reading', isAuthenticated, (req,res,next) => {
 
 router.get('/want-to-read', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    res.render('want-to-read')
+    Book.find({$and: [{userId: req.session.user._id},{listType: 'want'}]})
+    .then(wantedBooks => {
+      res.render('want-to-read', {
+        books: wantedBooks})
+    })
+    .catch(err => {
+      res.send(err)
+    })
   } else {
       res.redirect('/')
   }
@@ -145,11 +155,33 @@ router.get('/want-to-read', isAuthenticated, (req,res,next) => {
 
 router.get('/already-read', isAuthenticated, (req,res,next) => {
   if(req.session.user){
-    res.render('already-read')
+    Book.find({$and: [{userId: req.session.user._id},{listType: 'already'}]})
+    .then(readBooks => {
+      res.render('already-read', {
+        books: readBooks})
+    })
+    .catch(err => {
+      res.send(err)
+    })
   } else {
-      res.redirect('/')
+    res.redirect('/')
   }
 })
 
+router.post('/:id/edit', isAuthenticated, (req,res,next) => {
+  async function updateBook(){
+    let foundBook = await Book.findById(req.params.id);
+    foundBook.listType = req.body.books;
+    await foundBook.save();
+    res.redirect('/home')
+  }
+  updateBook();
+})
+
+router.post('/:id/delete', isAuthenticated, (req,res,next) => {
+  Book.findByIdAndRemove(req.params.id)
+    .then(res.redirect('/home'))
+    .catch(err => res.send(err))
+})
 
 module.exports = router;
