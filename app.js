@@ -25,7 +25,7 @@ require("./config")(app);
 app.set('trust proxy', 1);
 app.use(
     session({
-        secret: 'key',
+        secret: process.env.SESSION_SECRET,
         resave: true,
         saveUninitialized: false,
         cookie: {
@@ -35,7 +35,7 @@ app.use(
             maxAge: 900000 // 60 * 1000 ms === 1 min
         },
         store: MongoStore.create({
-            mongoUrl: 'mongodb://localhost/book-tracker' })
+            mongoUrl: process.env.MONGODB_URI })
     })
 )
 
